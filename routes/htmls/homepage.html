@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Challenge Carnival</title>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+	<script src="/javascripts/jquery.js"></script>
+
+</head>
+<body>
+	<h1>Challenge Carnival</h1>
+	<p>Welcome to Challenge Carnival!</p>
+	<a href="/register">Register</a>
+	<br>
+	<br>
+	<br>
+	<form action="/login_post" method="post" onsubmit="return Submit()">
+		<span>Email</span><span>&nbsp;</span>
+		<input id="id_email" type="text" placeholder="example@gmail.com" name="email">
+		<br><br>
+
+		<span>Password</span><span>&nbsp;</span>
+		<input id="id_pwd" type="password" placeholder="enter your password" name="password">
+		<br><br>
+
+		<button id="id_submit">Log in</button>
+	</form>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="row">
+		<div class="col-xs-4"></div>
+		<div class="col-xs-4">
+			<a href="/ranking?ctgry=All">All</a>
+		</div>
+	</div>
+	<br>
+	<br>
+	<div class="row">
+		<div class="col-xs-3">
+			<a href="/ranking?ctgry=表面笑嘻嘻">表面笑嘻嘻</a>
+		</div>
+		<div class="col-xs-3">
+			<a href="/ranking?ctgry=双面人">双面人</a>
+		</div>
+		<div class="col-xs-3">
+			<a href="/ranking?ctgry=打结的舌头">打结的舌头</a>
+		</div>
+		<div class="col-xs-3">
+			<a href="/ranking?ctgry=我想要水">我想要水</a>
+		</div>
+	</div>
+	<br>
+	<br>
+	<div class="row">
+		<div class="col-xs-3">
+			<a href="/ranking?ctgry=麒麟臂">麒麟臂</a>
+		</div>
+		<div class="col-xs-3">
+			<a href="/ranking?ctgry=贼眉鼠眼">贼眉鼠眼</a>
+		</div>
+		<div class="col-xs-3">
+			<a href="/ranking?ctgry=亲密接触">亲密接触</a>
+		</div>
+		<div class="col-xs-3">
+			<a href="/ranking?ctgry=气 死了">气 死了</a>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var Submit = function() {
+			var email = document.getElementById('id_email').value
+			var pwd = document.getElementById('id_pwd').value
+			if(email == "" || pwd == "") {
+				alert("Please enter your user information!")
+				return false
+			}
+			// var validEmail = email.indexOf('@') > 0 && email.split('@')[1].indexOf('.') > 0
+			// if(!validEmail) {
+			// 	alert('Please enter a valid email address!')
+			// 	return false
+			// }
+			return true
+		}
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

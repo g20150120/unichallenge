@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Register</title>
+	<link rel="stylesheet" href="/stylesheets/style.css">
+	<link rel="stylesheet" href="/stylesheets/bootstrap.css">
+	<script src="/javascripts/jquery.js"></script>
+</head>
+<body>
+	<h3>Register</h3>
+	<form id="form_register" name="register" method="post" action="/register_post" onsubmit="return Submit()">
+		<span>Email </span>
+		<input id="id_email" type="text" placeholder="example@gmail.com" name="email">
+		<br><br>
+
+		<span>Password </span>
+		<input id="id_pwd" type="password" placeholder="enter your password" name="password">
+		<br><br>
+
+		<span>Confirm your password </span>
+		<input id="id_confirm" type="password" placeholder="confirm your password">
+		<br><br>
+
+		<span>Nickname </span>
+		<input id="id_nickname" type="text" placeholder="g20150120" name="nickname">
+		<br><br>
+
+		<span>Gender </span>
+		<select name="gender">
+			<option value="male">Male</option>
+			<option value="female">Female</option>
+		</select>
+		<br><br>
+
+		<span>School </span>
+		<input id="id_school" type="text" placeholder="DulwichCollege Suzhou" name="school">
+		<br><br>
+
+		<span>Description </span><br><br>
+		<textarea id="id_des" cols="20" rows="15" name="description" placeholder="Describe yourself"></textarea>
+		<br><br>
+		
+		<span>Verification code </span>
+		<input id="id_code" type="text" placeholder="enter the code sent to your email address" style="width: 300px;">
+		<br><br>
+
+		<button id="id_submit">Get code</button>
+	</form>
+	<br>
+	<br>
+	<br>
+	<br>
+	<a href="/">Back</a>
+	<script type="text/javascript">
+		var status = 'Get code'
+
+		var CheckNull = function() {
+			var ids = ['email', 'pwd', 'confirm', 'nickname', 'des', 'school']
+			for(var i=0; i<ids.length; i++) {
+				if(document.getElementById('id_' + ids[i]).value == "") {
+					alert('Please fill in all information needed!')
+					return false
+				}
+			}
+			return true
+		}
+
+		// send GET request
+		var httpGet = function(url, addr) {
+			$.get(url, {'email':addr})
+		} 
+
+		// hash string into int
+		var hashCode = function(s) {
+			var h = 0
+			if (h == 0 && s.length > 0) {
+				for(var i = 0; i < s.length && i < 4; i++) {
+				    h = 31 * h + s[i].charCodeAt()
+				}
+			}
+			return h
+		}
+
+		var Submit = function() {
+			var email = document.getElementById('id_email').value
+			var pwd = document.getElementById('id_pwd').value
+			var confirm = document.getElementById('id_confirm').value
+			var validEmail = email.indexOf('@') > 0 && email.split('@')[1].indexOf('.') > 0
+			var code = document.getElementById('id_code').value
+
+			if(status == 'Get code') {
+				if(CheckNull()) {				
+					if(!validEmail) {
+						alert('The email address is not valid!')
+						return false
+					}
+					if(pwd != confirm) {
+						alert('Please confirm your password!')
+						return false
+					}
+					httpGet('verification_get', email)
+					status = 'Submit'
+					document.getElementById('id_submit').innerHTML = status
+					return false
+			    }
+				return false
+			} else if(status == 'Submit') {
+				if(code == "") {
+					alert('Please enter the code sent to your email address!')
+				}
+				if(hashCode(email).toString() != code) {
+					alert('Wrong verification code!')
+					return false
+				}
+				return true
+			}
+			
+		}
+	</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

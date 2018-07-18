@@ -1,0 +1,9 @@
+extends layout
+block content
+  h3.
+    Users
+  ul
+    -for(var i=1; i<userlist.length; i++)
+      -var user = userlist[i]
+      li
+        p() #{user.email} is from #{user.school}.

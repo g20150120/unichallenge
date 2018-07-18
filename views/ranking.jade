@@ -1,0 +1,41 @@
+extends layout
+block content
+
+  -var cmp_like = function(v1, v2) {
+    -return v1.like < v2.like
+  -}
+  -var cmp_time = function(v1, v2) {
+    -return v1.time < v2.time
+  -}
+
+  h1 #{category}
+  .row
+    .col-xs-6
+      h3 Top
+      -videos.sort(cmp_like)
+      -for(var i=0; i<videos.length; i++)
+        .row
+        -var video = videos[i]
+        .col-xs-6
+          -var link = '/like?category=' + category + '&link=' + video.link
+          a(href=video.link) #{video.title}
+        .col-xs-6
+          a(href=link) Like(#{video.like})
+    .col-xs-6
+      h3 Latest
+      -videos.sort(cmp_time)
+      -for(var i=0; i<videos.length; i++)
+        .row
+        -var video = videos[i]
+        .col-xs-6
+          -var link = '/like?category=' + category + '&link=' + video.link
+          a(href=video.link) #{video.title}
+        .col-xs-6
+          a(href=link) Like(#{video.like})
+  
+  br
+  br
+  br
+  br
+  a(href='/') Back
+
