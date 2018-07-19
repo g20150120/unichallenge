@@ -9,12 +9,19 @@ const saltRounds = 10;
 
 var router = express.Router();
 
+var getIp = function(req) {
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.headers['x-real-ip'] || req.socket.remoteAddress || '';
+  if(ip.split(',').length > 0) {
+    ip = ip.split(',')[0];
+  }
+  return ip;
+};
+
 // GET homepage: static
 router.get('/', function(req, res, next) {
   res.clearCookie('email');
   // res.render('index', { title: 'Express' });
-  // console.log(req.headers['x-forwarded-for']);
-  // console.log(req.connection.remoteAddress);
+  console.log(getIp(req));
   res.sendFile(__dirname + '/htmls/homepage.html');
 });
 
@@ -78,9 +85,9 @@ router.get('/verification_get', function(req, res){
   // if the email address has not been registered: send a verification email
   // db: vc
   var MongoClient = mongodb.MongoClient;
-  var url = 'mongodb://localhost:27017/vc';
+  var mongoServer = 'mongodb://localhost:27017/vc';
   // connect to check if this email address is already in db
-  MongoClient.connect(url, function(err, db) {
+  MongoClient.connect(mongoServer, function(err, db) {
     if(!err) {
       // collection: users
       var users = db.collection('users');
@@ -90,7 +97,7 @@ router.get('/verification_get', function(req, res){
       {
         // if email is found: the email address has already been registered
         if(user) { 
-          result.locals.error = {
+          res.locals.error = {
             message: 'Whoops! Something went wrong!',
             status: 'Your email address has already been registered!',
             stack: 'Please choose another email address!'
@@ -131,9 +138,9 @@ router.post('/login_post', function(req, res) {
   var pwd = req.body.password;
   // db: vc
   var MongoClient = mongodb.MongoClient;
-  var url = 'mongodb://localhost:27017/vc';
+  var mongoServer = 'mongodb://localhost:27017/vc';
   // connect to check login information
-  MongoClient.connect(url, function(err, db)
+  MongoClient.connect(mongoServer, function(err, db)
   {
     if(!err) {
       // collections: users
@@ -202,15 +209,15 @@ router.get('/home', function(req, res) {
   } else { 
     var MongoClient = mongodb.MongoClient;
     // db: vc
-    var url = 'mongodb://localhost:27017/vc';
+    var mongoServer = 'mongodb://localhost:27017/vc';
     // connect to get user information and user's video information
-    MongoClient.connect(url, function(err, db)
+    MongoClient.connect(mongoServer, function(err, db)
     {
       if(!err) {
         // stores this user's video
         var video_list = [];
         // collection: videos
-        var videos = db.collection('videos')
+        var videos = db.collection('videos');
         // find this user's videos
         videos.find({"email": addr}).toArray(function(err, video) {
           video_list = video;
@@ -287,13 +294,13 @@ router.get('/ranking', function(req, res) {
   }
   var MongoClient = mongodb.MongoClient;
   // db: vc
-  var url = 'mongodb://localhost:27017/vc';
+  var mongoServer = 'mongodb://localhost:27017/vc';
   // connect to find all videos in that category
-  MongoClient.connect(url, function(err, db)
+  MongoClient.connect(mongoServer, function(err, db)
   {
     if(!err) {
       // collection: videos
-      var videos = db.collection('videos')
+      var videos = db.collection('videos');
       videos.find(obj).toArray(function(err, video) {
         res.render('ranking', {
           title: 'Ranking',
@@ -314,15 +321,32 @@ router.get('/like', function(req, res) {
   // /like?category=双面人&link=https://v.qq.com/
   var ctgry = decodeURI(req.url).split('?')[1].split('&')[0].split('=')[1];
   var link = decodeURI(req.url).split('?')[1].split('&')[1].split('=')[1];
-  var MongoClient = mongodb.MongoClient;
-  // db: vc
-  var url = 'mongodb://localhost:27017/vc';
-  // connect to update like
-  MongoClient.connect(url, function(err, db)
-  {
-    if(!err) {
-      // collection: video
-      var videos = db.collection('videos')
+
+  // max like sent in 24h 
+  var MAX_LIKE = 3;
+  
+  // get ip
+  var ipAdd = getIp(req);
+  console.log(ipAdd);
+  
+  // get time: int
+  var now = new Date();
+  now = now.valueOf();
+
+  // check time = function(int_Tnow, int_TinDB)
+  var checkeTime = function(t1, t2) {
+    return t1-t2 > 24*60*60*1000; // 24 h
+  }
+
+  // like++
+  var incLikeInDB = function() {
+    var MongoClient = mongodb.MongoClient;
+    // db: vc
+    var mongoServer = 'mongodb://localhost:27017/vc';
+    // connect to increase like by 1
+    MongoClient.connect(mongoServer, function(err, db) {
+      // collection: videos
+      var videos = db.collection('videos');
       // find video by link: assumes no repeating video links
       // add like by one at a time
       videos.update({"link": link}, {$inc: {"like": 1}}, function(err, video) {
@@ -331,14 +355,88 @@ router.get('/like', function(req, res) {
           res.redirect('/ranking?category=' + ctgry);
           db.close();
         }
-      });    
+      });
+    });    
+  }  
+
+  var MongoClient = mongodb.MongoClient;
+  // db: vc
+  var mongoServer = 'mongodb://localhost:27017/vc';
+  // connect to how many likes this ip sent today
+  MongoClient.connect(mongoServer, function(err, db) {
+    if(!err) {
+      // collections: ips
+      var ips = db.collection('ips');
+      ips.findOne({"ip": ipAdd}, function(err, ip) {
+        // if this ip exists in DB
+        if(ip) {
+          // console.log(ip);        
+          // if 24h has passed since last like: left=max-1, time=now, like++
+          if(checkeTime(now, ip.time)) {
+            ips.update({"ip": ipAdd}, {$set: {"left": MAX_LIKE-1, "time": now}}, function(err, nip) {
+              incLikeInDB();
+              db.close();
+            });
+          // if last like is less than 24h ago: 
+          } else {
+            // if likes sent < MAX_LIKE: max--, like++
+            if(ip.left) {
+              ips.update({"ip": ipAdd}, {$inc: {"left": -1}}, function(err, nip) {
+                incLikeInDB();
+                db.close();
+              });             
+            // if likes sent reaches MAX_LIKE: reject like request
+            } else {
+              db.close();
+              res.locals.error = {
+                message: 'Whoops! Something went wrong!',
+                status: 'You have sent too many likes today!',
+                stack: 'Please come tomorrow! Thanks for your participation!'
+              };
+              res.render('error', {title: 'Error'});
+            }
+          }
+        // if this ip does not exist in DB: insert this ip, left=max-1, time=now, like++
+        } else {
+          var ip = {
+            "ip": ipAdd,
+            "left": MAX_LIKE-1,
+            "time": now
+          };
+          ips.insert([ip], function(err, result) {
+            incLikeInDB();
+            db.close();
+          });
+        }
+      });
     }
-  });  
+  });
 });
 
-
-
-
+// GET the request to jump to some link and update viewcount
+router.get('/jumpTo',function(req, res) {
+  // /jumpTo?link=https://www.booking.com
+  var link = decodeURI(req.url).split('?')[1].split('=')[1];
+  var MongoClient = mongodb.MongoClient;
+  // db: vc
+  var mongoServer = 'mongodb://localhost:27017/vc';
+  // connect to update viewcount
+  MongoClient.connect(mongoServer, function(err, db) {
+    if(!err) {
+      // collection: videos
+      var videos = db.collection('videos');
+      // find video by link: assumes no repeating video links
+      // add viewcount by one at a time
+      videos.update({"link": link}, {$inc: {"viewcount": 1}}, function(err, video) {
+        if(!err) {
+          // redirect to that link
+          res.redirect(link);
+          db.close();
+        }
+      });
+    }
+  });
+});
 
 
 

@@ -1,8 +1,11 @@
 extends layout
 block content
 
-  -var cmp_like = function(v1, v2) {
-    -return v1.like < v2.like
+  -var weight = function(v) {
+    -return v.like * 4 + v.viewcount
+  -}
+  -var cmp_top = function(v1, v2) {
+    -return weight(v1) < weight(v2)
   -}
   -var cmp_time = function(v1, v2) {
     -return v1.time < v2.time
@@ -12,13 +15,14 @@ block content
   .row
     .col-xs-6
       h3 Top
-      -videos.sort(cmp_like)
+      -videos.sort(cmp_top)
       -for(var i=0; i<videos.length; i++)
         .row
         -var video = videos[i]
         .col-xs-6
           -var link = '/like?category=' + category + '&link=' + video.link
-          a(href=video.link) #{video.title}
+          -var jumpTo = '/jumpTo?link=' + video.link
+          a(href=jumpTo) #{video.title}
         .col-xs-6
           a(href=link) Like(#{video.like})
     .col-xs-6

@@ -11,13 +11,14 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "express-rate-limit": "^2.11.0",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
     "kerberos": "~0.0.17",
     "mongodb": "~2.1.19",
     "morgan": "~1.9.0",
     "nodemailer": "^4.4.0",
-    "serve-favicon": "^2.4.5",
+    "serve-favicon": "^2.5.0",
     "url": "^0.11.0"
   }
 }
