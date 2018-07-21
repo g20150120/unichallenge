@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		Log in
+	</title>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/homepage.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
+
+  <style type="text/css">
+    body {
+      margin-top: 61px;
+      margin-bottom: 61px;
+    }
+    button {
+      color: white;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-4"></div>
+      <div class="col-xs-4">
+        <form action="/login_post" method="post" onsubmit="return Submit()">
+          <span>Email</span><span>&nbsp;</span>
+          <input id="id_email" type="text" placeholder="example@gmail.com" name="email">
+          <br><br>
+
+          <span>Password</span><span>&nbsp;</span>
+          <input id="id_pwd" type="password" placeholder="enter your password" name="password">
+          <br><br>
+
+          <button id="id_submit">Log in</button>
+        </form>
+        <br>
+        <br>
+        <p>
+          Did not register? <a href="/register">Register here!</a>
+        </p>
+      </div>
+    </div>
+  </div>
+	
+	<br>
+
+	<script type="text/javascript">
+		var Submit = function() {
+			var email = document.getElementById('id_email').value
+			var pwd = document.getElementById('id_pwd').value
+			if(email == "" || pwd == "") {
+				alert("Please enter your user information!")
+				return false
+			}
+			// var validEmail = email.indexOf('@') > 0 && email.split('@')[1].indexOf('.') > 0
+			// if(!validEmail) {
+			// 	alert('Please enter a valid email address!')
+			// 	return false
+			// }
+			return true
+		}
+	</script>
+
+</body>
+</html>
