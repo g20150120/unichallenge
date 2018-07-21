@@ -1,67 +1,64 @@
 extends layout
 
 block content
+
+  body.needStyle
   
-  h1 #{title}
-  h2 Hi #{user.nickname}, Welcome to #{title}!
-  
-  br
-  br
-  
-  h3 My videos
-  -if(!videos.length)
-    p() None
-  ul
-    -for(var i=0; i<videos.length; i++)
-      -var video = videos[i]
-      li
-        -if(video.approved)
-          p()
-            a(href='#{video.link}') 
-              | #{video.title}
-            |  has been approved.
-        -else
-          p()
-            a(href='#{video.link}') 
-              | #{video.title}
-            |  has not been approved.
+    h1 #{title}
+    h2 Hi #{user.nickname}, Welcome to #{title}!
+    
+    br
+    br
+    
+    h3 My videos
+    -if(!videos.length)
+      p() None
+    ul
+      -for(var i=0; i<videos.length; i++)
+        -var video = videos[i]
+        li
+          -if(video.approved)
+            p()
+              a(href='#{video.link}') 
+                | #{video.title}
+              |  has been approved.
+          -else
+            p()
+              a(href='#{video.link}') 
+                | #{video.title}
+              |  has not been approved.
 
-  br
-  br
-
-  h3 Submit a video
-  form(action='/submitvideo_post', method='post', onsubmit='return Submit()')
-    span Video title 
-    input#id_title(type='text', placeholder='My First Video', name='title')
     br
     br
 
-    span Link 
-    input#id_link(type='text', placeholder='https://v.qq.com/x/page/a0720kj085a.html', name='link', style='width: 300px;')
-    br
-    br
+    h3 Submit a video
+    form(action='/submitvideo_post', method='post', onsubmit='return Submit()')
+      span Video title 
+      input#id_title(type='text', placeholder='My First Video', name='title')
+      
 
-    span Category 
-    select#id_ctgry(name='category')
-      -var ctgry = ['表面笑嘻嘻', '双面人', '打结的舌头', '我想要水', '麒麟臂', '贼眉鼠眼', '亲密接触', '气 死了']
-      -for(var i=0; i<8; i++)
-        option(value='#{ctgry[i]}') #{ctgry[i]}
-    br
-    br
+      span Link 
+      input#id_link(type='text', placeholder='https://v.qq.com/x/page/a0720kj085a.html', name='link', style='width: 300px;')
+      
 
-    span Description
-    br
-    br
-    textarea#id_des(cols='20', rows='15', name='description', placeholder='Describe your video')
-    br
-    br
+      span Category 
+      select#id_ctgry(name='category')
+        -var ctgry = ['表面笑嘻嘻', '双面人', '打结的舌头', '我想要水', '麒麟臂', '贼眉鼠眼', '亲密接触', '气 死了']
+        -for(var i=0; i<8; i++)
+          option(value='#{ctgry[i]}') #{ctgry[i]}
+      
+      br
+      span Description
+      
+      textarea#id_des(cols='20', rows='5', name='description', placeholder='Describe your video')
+      
+      br
+      button#id_submit Submit
+    
 
-    button#id_submit Submit
-  
-
-  br
-  br  
-  a(href='/logout') Log out
+    br
+    br  
+    a(href='/logout') Log out
 
   script(type='text/javascript').
     var Submit = function() {

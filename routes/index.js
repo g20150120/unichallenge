@@ -21,7 +21,7 @@ var getIp = function(req) {
 router.get('/', function(req, res, next) {
   res.clearCookie('email');
   // res.render('index', { title: 'Express' });
-  // console.log(getIp(req));
+  console.log(getIp(req));
   res.sendFile(__dirname + '/htmls/homepage.html');
 });
 
@@ -30,11 +30,11 @@ router.get('/login', function(req, res) {
 });
 
 router.get('/about', function(req, res) {
-  res.send('about');
+  res.sendFile(__dirname + '/htmls/about.html');
 });
 
 router.get('/rules', function(req, res) {
-  res.send('rules');
+  res.sendFile(__dirname + '/htmls/rules.html');
 });
 
 // GET the page to register: static
@@ -350,7 +350,7 @@ router.get('/like', function(req, res) {
   var link = decodeURI(req.url).split('?')[1].split('&')[1].split('=')[1];
 
   // max like sent in 24h 
-  var MAX_LIKE = 3;
+  var MAX_LIKE = 10;
   
   // get ip
   var ipAdd = getIp(req);

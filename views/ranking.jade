@@ -1,6 +1,25 @@
 extends layout
 block content
 
+  link(rel='stylesheet', type='text/css', href='/stylesheets/style.css')
+  link(rel='stylesheet', type='text/css', href='/stylesheets/homepage.css')
+  link(rel='stylesheet', type='text/css', href='/stylesheets/bootstrap.css')
+  style(type='text/css').
+    body {
+      margin-top: 61px;
+      margin-bottom: 61px;
+      padding-top: 30px;
+      padding-left: 250px;
+      padding-right: 250px;
+      background-color: rgb(235, 238, 238);
+    }
+    form {
+      font-size: 22px;
+    }
+    button {
+      color: white;
+    }
+
   -var weight = function(v) {
     -return v.like * 4 + v.viewcount
   -}
@@ -11,37 +30,39 @@ block content
     -return v1.time < v2.time
   -}
 
-  h1 #{category}
-  .row
-    .col-xs-6
-      h3 Top
-      -videos.sort(cmp_top)
-      -for(var i=0; i<videos.length; i++)
-        .row
-        -var video = videos[i]
-        .col-xs-6
-          -var link = '/like?category=' + category + '&link=' + video.link
-          -var jumpTo = '/jumpTo?link=' + video.link
-          a(href=jumpTo) #{video.title}
-        .col-xs-6
-          a(href=link) Like(#{video.like})
-    .col-xs-6
-      h3 Latest
-      -videos.sort(cmp_time)
-      -for(var i=0; i<videos.length; i++)
-        .row
-        -var video = videos[i]
-        .col-xs-6
-          -var link = '/like?category=' + category + '&link=' + video.link
-          a(href=video.link) #{video.title}
-        .col-xs-6
-          a(href=link) Like(#{video.like})
-  
-  br
-  br
-  br
-  br
-  a(href='/#portfolio') Back
+  body
+
+    h1 #{category}
+    .row
+      .col-xs-6
+        h3 Top
+        -videos.sort(cmp_top)
+        -for(var i=0; i<videos.length; i++)
+          .row
+          -var video = videos[i]
+          .col-xs-6
+            -var link = '/like?category=' + category + '&link=' + video.link
+            -var jumpTo = '/jumpTo?link=' + video.link
+            a(href=jumpTo) #{video.title}
+          .col-xs-6
+            a(href=link) Like(#{video.like})
+      .col-xs-6
+        h3 Latest
+        -videos.sort(cmp_time)
+        -for(var i=0; i<videos.length; i++)
+          .row
+          -var video = videos[i]
+          .col-xs-6
+            -var link = '/like?category=' + category + '&link=' + video.link
+            a(href=video.link) #{video.title}
+          .col-xs-6
+            a(href=link) Like(#{video.like})
+    
+    br
+    br
+    br
+    br
+    a(href='/#portfolio') Back
 
 
 

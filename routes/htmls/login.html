@@ -10,20 +10,27 @@
 
   <style type="text/css">
     body {
-      margin-top: 61px;
-      margin-bottom: 61px;
-    }
-    button {
-      color: white;
-    }
+        margin-top: 61px;
+        margin-bottom: 61px;
+        padding-top: 30px;
+        padding-left: 250px;
+        padding-right: 250px;
+        background-color: rgb(235, 238, 238);
+      }
+      form {
+        font-size: 22px;
+      }
+      button {
+        color: white;
+      }
   </style>
 
 </head>
 <body>
   <div class="container">
     <div class="row">
-      <div class="col-xs-4"></div>
-      <div class="col-xs-4">
+      <div class="col-xs-2"></div>
+      <div class="col-xs-10">
         <form action="/login_post" method="post" onsubmit="return Submit()">
           <span>Email</span><span>&nbsp;</span>
           <input id="id_email" type="text" placeholder="example@gmail.com" name="email">

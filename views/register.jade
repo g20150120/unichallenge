@@ -7,18 +7,26 @@ html
     link(rel='stylesheet', type='text/css', href='/stylesheets/bootstrap.css')
     style(type='text/css').
       body {
-      margin-top: 61px;
-      margin-bottom: 61px;
+        margin-top: 61px;
+        margin-bottom: 61px;
+        padding-top: 30px;
+        padding-left: 250px;
+        padding-right: 250px;
+        background-color: rgb(235, 238, 238);
+      }
+      form {
+        font-size: 22px;
       }
       button {
-      color: white;
+        color: white;
       }
+      
     script(src='/javascripts/jquery.js')
   body
     .container
       .row
-        .col-xs-4
-        .col-xs-4
+        .col-xs-2
+        .col-xs-10
           form#form_register(name='register', method='post', action='/register_post', onsubmit='return Submit()')
             span Email 
             input#id_email(type='text', placeholder='example@gmail.com', name='email')
@@ -38,8 +46,10 @@ html
               -for(var i=0; i<schools.length; i++)
                 -var school = schools[i]
                   option(value=school.name) #{school.name}
+            br
             span Description 
-            textarea#id_des(cols='20', rows='15', name='description', placeholder='Describe yourself')
+            textarea#id_des(cols='20', rows='5', name='description', placeholder='Describe yourself')
+            br
             span Verification code 
             input#id_code(type='text', placeholder='enter the code sent to your email address', style='width: 300px;')
             button#id_submit Get code

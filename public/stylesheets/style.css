@@ -1,6 +1,8 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif ;
+body.needStyle {
+  margin-top: 61px !important;
+  margin-bottom: 61px !important;
+  padding-top: 30px !important;
+  padding-left: 250px !important;
+  padding-right: 250px !important;
+  background-color: rgb(235, 238, 238) !important;
 }
-
-
