@@ -21,13 +21,40 @@ var getIp = function(req) {
 router.get('/', function(req, res, next) {
   res.clearCookie('email');
   // res.render('index', { title: 'Express' });
-  console.log(getIp(req));
+  // console.log(getIp(req));
   res.sendFile(__dirname + '/htmls/homepage.html');
+});
+
+router.get('/login', function(req, res) {
+  res.sendFile(__dirname + '/htmls/login.html');
+});
+
+router.get('/about', function(req, res) {
+  res.send('about');
+});
+
+router.get('/rules', function(req, res) {
+  res.send('rules');
 });
 
 // GET the page to register: static
 router.get('/register', function(req, res) {
-	res.sendFile(__dirname + '/htmls/register.html');
+	// res.sendFile(__dirname + '/htmls/register.html');
+  var MongoClient = mongodb.MongoClient;
+  var mongoServer = 'mongodb://localhost:27017/vc'
+  MongoClient.connect(mongoServer, function(err, db) {
+    var schools = db.collection('schools');
+    if(!err) {
+      schools.find({}).toArray(function(err, items) {
+        if(!err) {
+          res.render('register', {
+            "schools": items
+          });
+          db.close();
+        }
+      });
+    }   
+  });
 });
 
 // POST the request to register

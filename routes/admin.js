@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var router = express.Router();
+
 // GET admin homepage: static
 // /admin/
 router.get('/', function(req, res, next) {
@@ -105,24 +106,63 @@ router.get('/approvevideo', function(req, res) {
 router.get('/manage', function(req, res) {
   // /manage
   // manage?collection=users
-  var haveParam = decodeURI(req.url).indexOf('?') !== -1
+  var haveParam = decodeURI(req.url).indexOf('?') !== -1;
   // if request has a parameter indicating a collection of DB
   if(haveParam) {
-    var collection = decodeURI(req.url).split('?')[1].split('=')[1];
-    // var MongoClient = mongodb.MongoClient;
-    // // db: vc
-    // var mongoServer = 'mongodb://localhost:27017/vc';
-    // MongoClient.connect(mongoServer, function(err, db) {
-
-    // });
-    res.send(collection);
+    var col = decodeURI(req.url).split('?')[1].split('=')[1];
+    if(col == 'schools' || col == 'users') {
+      var MongoClient = mongodb.MongoClient;
+      // db: vc
+      var mongoServer = 'mongodb://localhost:27017/vc';
+      MongoClient.connect(mongoServer, function(err, db) {
+        if(!err) {
+          var collection = db.collection(col);
+          collection.find({}).toArray(function(err, items) {
+            var obj = {};
+            if(col == 'schools') {
+              obj.title = 'Schools';
+              obj.schools = items;
+              res.render('schoollist', obj);
+            } else {
+              obj.title = 'Users';
+              obj.userlist = items;
+              res.render('userlist', obj);
+            }
+            db.close();
+          });
+        }
+      });
+    } else {
+      res.send(col);
+    }    
   // if the request just asks to direct to '/admin/manage'
   } else {
     res.sendFile(__dirname + '/htmls/adminmanage.html')
   }
 });
 
-
+// POST the request to add a school to DB
+// /admin/addschool_post
+router.post('/addschool_post', function(req, res) {
+  var school = req.body.name;
+  var MongoClient = mongodb.MongoClient;
+  // db: vc
+  var mongoServer = 'mongodb://localhost:27017/vc';
+  MongoClient.connect(mongoServer, function(err, db) {
+    if(!err) {
+      var schools = db.collection('schools');
+      var newschool = {
+        "name": school
+      };
+      schools.insert([newschool], function(err, result) {
+        if(!err) {
+          db.close();
+          res.redirect('/admin/manage?collection=schools');
+        }
+      });
+    }
+  });
+});
 
 
 

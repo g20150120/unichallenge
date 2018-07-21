@@ -2,55 +2,66 @@
 <html>
 <head>
 	<title>Register</title>
-	<link rel="stylesheet" href="/stylesheets/style.css">
-	<link rel="stylesheet" href="/stylesheets/bootstrap.css">
-	<script src="/javascripts/jquery.js"></script>
+	
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/homepage.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
+  
+  <style type="text/css">
+    body {
+      margin-top: 61px;
+      margin-bottom: 61px;
+    }
+    button {
+      color: white;
+    }
+    
+  </style>
+	
+  <script src="/javascripts/jquery.js"></script>
 </head>
 <body>
-	<h3>Register</h3>
-	<form id="form_register" name="register" method="post" action="/register_post" onsubmit="return Submit()">
-		<span>Email </span>
-		<input id="id_email" type="text" placeholder="example@gmail.com" name="email">
-		<br><br>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-4"></div>
+      <div class="col-xs-4">
+      	<form id="form_register" name="register" method="post" action="/register_post" onsubmit="return Submit()">
+      		<span>Email </span>
+      		<input id="id_email" type="text" placeholder="example@gmail.com" name="email">
 
-		<span>Password </span>
-		<input id="id_pwd" type="password" placeholder="enter your password" name="password">
-		<br><br>
+      		<span>Password </span>
+      		<input id="id_pwd" type="password" placeholder="enter your password" name="password">
 
-		<span>Confirm your password </span>
-		<input id="id_confirm" type="password" placeholder="confirm your password">
-		<br><br>
+      		<span>Confirm your password </span>
+      		<input id="id_confirm" type="password" placeholder="confirm your password">
 
-		<span>Nickname </span>
-		<input id="id_nickname" type="text" placeholder="g20150120" name="nickname">
-		<br><br>
+      		<span>Nickname </span>
+      		<input id="id_nickname" type="text" placeholder="g20150120" name="nickname">
 
-		<span>Gender </span>
-		<select name="gender">
-			<option value="male">Male</option>
-			<option value="female">Female</option>
-		</select>
-		<br><br>
+      		<span>Gender </span>
+      		<select name="gender">
+      			<option value="male">Male</option>
+      			<option value="female">Female</option>
+      		</select>
+          <br>
 
-		<span>School </span>
-		<input id="id_school" type="text" placeholder="DulwichCollege Suzhou" name="school">
-		<br><br>
+      		<span>School </span>
+      		<input id="id_school" type="text" placeholder="DulwichCollege Suzhou" name="school">
 
-		<span>Description </span><br><br>
-		<textarea id="id_des" cols="20" rows="15" name="description" placeholder="Describe yourself"></textarea>
-		<br><br>
-		
-		<span>Verification code </span>
-		<input id="id_code" type="text" placeholder="enter the code sent to your email address" style="width: 300px;">
-		<br><br>
+      		<span>Description </span>
+      		<textarea id="id_des" cols="20" rows="15" name="description" placeholder="Describe yourself"></textarea>
+      		
+      		<span>Verification code </span>
+      		<input id="id_code" type="text" placeholder="enter the code sent to your email address" style="width: 300px;">
 
-		<button id="id_submit">Get code</button>
-	</form>
-	<br>
-	<br>
-	<br>
-	<br>
-	<a href="/">Back</a>
+      		<button id="id_submit">Get code</button>
+      	</form>
+      	<br>
+      	<br>
+      	<a href="/">Back</a>
+      </div>
+    </div>
+  </div>
 	<script type="text/javascript">
 		var status = 'Get code'
 

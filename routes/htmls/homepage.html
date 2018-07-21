@@ -2,41 +2,69 @@
 <html>
 <head>
 	<title>Challenge Carnival</title>
-	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
-	<link rel="stylesheet" href="/stylesheets/bootstrap.css">
-	<script src="/javascripts/jquery.js"></script>
+	
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="/stylesheets/homepage.css">
+  <link rel="stylesheet" href="/stylesheets/magnific-popup.css">
+  <link rel="stylesheet" href="/stylesheets/media-queries.css">
+
+  <script src="/javascripts/ajax.libs.jquery.1.10.2.jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="/javascripts/jquery-1.10.2.min.js"><\/script>')</script>
+  <script src="/javascripts/jquery-migrate-1.2.1.min.js"></script>
+  <script src="/javascripts/jquery.flexslider.js"></script>
+  <script src="/javascripts/waypoints.js"></script>
+  <script src="/javascripts/jquery.fittext.js"></script>
+  <script src="/javascripts/init.js"></script>
 
 </head>
-<body>
-	<h1>Challenge Carnival</h1>
-	<p>Welcome to Challenge Carnival!</p>
-	<a href="/register">Register</a>
-	<br>
-	<br>
-	<br>
-	<form action="/login_post" method="post" onsubmit="return Submit()">
-		<span>Email</span><span>&nbsp;</span>
-		<input id="id_email" type="text" placeholder="example@gmail.com" name="email">
-		<br><br>
+<body style="background: #ebeeee;">
+  <header id="home" style="background: url(../images/header-background.jpg) no-repeat top;">
+    
+    <nav id="nav-wrap">
+      <a class="mobile-btn" href="#nav-wrap" title="Show navigation">Show navigation</a>
+      <a class="mobile-btn" href="#" title="Hide navigation">Hide navigation</a>
+      <ul id="nav" class="nav">
+        <li class="current"><a class="smoothscroll" href="#home">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/ranking?ctgry=All">Ranking</a></li>
+        <li><a class="smoothscroll" href="#portfolio">Categories</a></li>
+        <li><a href="/rules">Rules</a></li>            
+        <li><a href="/login">Log in</a></li>
+      </ul> <!-- end #nav -->
+    </nav> <!-- end #nav-wrap -->
 
-		<span>Password</span><span>&nbsp;</span>
-		<input id="id_pwd" type="password" placeholder="enter your password" name="password">
-		<br><br>
+    <div class="row banner">
+      <div class="banner-text">
+      <!header and introduction>
+        <h1 class="responsive-headline">Challenge Carnival</h1>
+        <h3>
+          This is a XXXXXXXXXXX website.
+        </h3>
+      </div>
+    </div>
+    
+  </header>
+  
 
-		<button id="id_submit">Log in</button>
-	</form>
+	
+	<br>
+	<br>
+	<br>
+	
 	<br>
 	<br>
 	<br>
 	<br>
 	<br>
 	<br>
+  
 	<div class="row">
 		<div class="col-xs-4"></div>
 		<div class="col-xs-4">
 			<a href="/ranking?ctgry=All">All</a>
 		</div>
 	</div>
+  <!-- 
 	<br>
 	<br>
 	<div class="row">
@@ -69,6 +97,176 @@
 			<a href="/ranking?ctgry=气 死了">气 死了</a>
 		</div>
 	</div>
+    
+
+ -->
+
+
+    <!=========================Portfolio=================================>
+   <section id="portfolio">
+
+      <div class="row">
+
+        <div class="twelve columns collapsed">
+
+            <h1>Check Out Eight Categories of Challenge Carnival</h1>
+            <!======portfolio-wrapper======>
+            
+            <div id="portfolio-wrapper" class="bgrid-quarters s-bgrid-thirds cf">
+
+                <!item01 starts>
+                <div class="columns portfolio-item">
+                  <div class="item-wrap">
+                    <a href="/ranking?ctgry=表面笑嘻嘻" title="">
+                        <img alt="" src="images/portfolio/cube.jpg">
+                        <div class="overlay">
+                          <div class="portfolio-item-meta">
+                            <h5>Cube</h5>
+                            <p>Rubik's Cube in the flowers</p>
+                          </div>
+                        </div>
+                        
+                     </a>
+                  </div>
+                </div>
+                <!item01 ends>
+
+                <!item02 starts>
+                <div class="columns portfolio-item">
+                  <div class="item-wrap">
+                     <a href="/ranking?ctgry=双面人" title="">
+                        <img alt="" src="images/portfolio/lego.jpg">
+                        <div class="overlay">
+                          <div class="portfolio-item-meta">
+                            <h5>LEGO Technic</h5>
+                            <p>LEGO 8043 &amp; LEGO 8110</p>
+                          </div>
+                        </div>
+                        
+                     </a>
+                  </div>
+                </div>
+                <!item02 ends>
+
+                <!item03 starts>
+                <div class="columns portfolio-item">
+                  <div class="item-wrap">
+                     <a href="/ranking?ctgry=打结的舌头" title="">
+                        <img alt="" src="images/portfolio/frisbee.jpg">
+                        <div class="overlay">
+                          <div class="portfolio-item-meta">
+                            <h5>Flying Disk</h5>
+                            <p>Frisbee with Glowing Sticks</p>
+                          </div>
+                        </div>
+                        
+                     </a>
+                  </div>
+                </div>
+                <!item03 ends>
+
+                <!item04 starts>
+                <div class="columns portfolio-item">
+                  <div class="item-wrap">
+                     <a href="/ranking?ctgry=我想要水" title="">
+                        <img alt="" src="images/portfolio/origami.jpg">
+                        <div class="overlay">
+                          <div class="portfolio-item-meta">
+                            <h5>Origami</h5>
+                            <p>Waterball &amp; Clipper</p>
+                          </div>
+                        </div>
+                        
+                     </a>
+                  </div>
+                </div>
+                <!item04 ends>
+
+                <!item05 starts>
+                <div class="columns portfolio-item">
+                  <div class="item-wrap">
+                     <a href="/ranking?ctgry=麒麟臂" title="">
+                        <img alt="" src="images/portfolio/costume.jpg">
+                        <div class="overlay">
+                          <div class="portfolio-item-meta">
+                            <h5>Costume</h5>
+                            <p>Wearing Dragon Costume</p>
+                          </div>
+                        </div>
+                        
+                     </a>
+                  </div>
+                </div>
+                <!item05 ends>
+
+                <!item06 starts>
+                <div class="columns portfolio-item">
+                  <div class="item-wrap">
+                     <a href="/ranking?ctgry=贼眉鼠眼" title="">
+                        <img alt="" src="images/portfolio/iot.jpg">
+                        <div class="overlay">
+                          <div class="portfolio-item-meta">
+                            <h5>Internet of Things</h5>
+                            <p>Smart Classroom System</p>
+                          </div>
+                        </div>
+                        
+                     </a>
+                  </div>
+                </div>
+                <!item06 ends>
+
+                <!item07 starts>
+                <div class="columns portfolio-item">
+                  <div class="item-wrap">
+                     <a href="/ranking?ctgry=亲密接触" title="">
+                        <img alt="" src="images/portfolio/gate.jpg">
+                        <div class="overlay">
+                          <div class="portfolio-item-meta">
+                            <h5>Skyscraper</h5>
+                            <p>A Skyscraper called 东方之门</p>
+                          </div>
+                        </div>
+                        
+                     </a>
+                  </div>
+                </div>
+                <!item07 ends>
+
+                <!item08 starts>
+                <div class="columns portfolio-item">
+                  <div class="item-wrap">
+                     <a href="/ranking?ctgry=气 死了" title="">
+                        <img alt="" src="images/portfolio/hangzhou.jpg">
+                        <div class="overlay">
+                          <div class="portfolio-item-meta">
+                            <h5>The West Lake</h5>
+                            <p>The West Lake in Hangzhou</p>
+                          </div>
+                        </div>
+                        
+                     </a>
+                  </div>
+                </div>
+                <!item08 ends>
+
+              
+            </div> <!-- portfolio-wrapper end -->
+
+        </div> <!-- twelve columns end -->
+
+
+        
+        
+        
+        
+
+      </div> <!-- row End -->
+
+   </section> <!-- Portfolio Section End-->
+
+
+
 	<script type="text/javascript">
 		var Submit = function() {
 			var email = document.getElementById('id_email').value
@@ -77,11 +275,6 @@
 				alert("Please enter your user information!")
 				return false
 			}
-			// var validEmail = email.indexOf('@') > 0 && email.split('@')[1].indexOf('.') > 0
-			// if(!validEmail) {
-			// 	alert('Please enter a valid email address!')
-			// 	return false
-			// }
 			return true
 		}
 	</script>
