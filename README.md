@@ -14,4 +14,4 @@ cd localtunnel-server
 bin/server --port 8080
 
 5.
-lt --port 3000 --subdomain challengecarnival
+lt --port 3000 --subdomain unichallenge

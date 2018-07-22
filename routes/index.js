@@ -144,9 +144,9 @@ router.get('/verification_get', function(req, res){
         }
       });
       let mailOptions = {
-        from: "Challenge Carnival  <1467222535@qq.com>",
+        from: "Uni-Challenge  <1467222535@qq.com>",
         to: addr,
-        subject: "Please confirm your email address - Challenge Carnival",
+        subject: "Please confirm your email address - Uni-Challenge",
         text: code
       };
       transporter.sendMail(mailOptions, (err, info) => {
@@ -255,7 +255,7 @@ router.get('/home', function(req, res) {
         users.findOne({"email": addr}, function(err, user) {
           // pass user and video information to user homepage
           res.render('userpage', {
-            title: 'Challenge Carnival', 
+            title: 'Uni-Challenge', 
             "user": user,
             "videos": video_list
           });

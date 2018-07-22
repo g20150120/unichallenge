@@ -1,35 +1,36 @@
 extends layout
 block content
-  h1.
-    Videos
-  ul
-    -for(var i=0; i<videolist.length; i++)
-      -var video = videolist[i]
-      li
-        p() #{video.title}
-        ul
-          li
-            | Author: 
-            p() #{video.email}
-          li
-            | Link: 
-            p()
-              a(href="#{video.link}") #{video.link}
-          li
-            | Category: 
-            p() #{video.category}
-          li
-            | Description: 
-            p() #{video.description}
-          -var link1 = "/admin/approvevideo?ok=true&link=" + video.link
-          -var link2 = "/admin/approvevideo?ok=false&link=" + video.link
-          a(href=link1) Approve
-          span 
-          a(href=link2) Decline
-  br
-  br
-  br
-  a(href='/admin') Back
+  body.needStyle
+    h1.
+      Videos
+    ul
+      -for(var i=0; i<videolist.length; i++)
+        -var video = videolist[i]
+        li
+          p() #{video.title}
+          ul
+            li
+              | Author: 
+              p() #{video.email}
+            li
+              | Link: 
+              p()
+                a(href="#{video.link}") #{video.link}
+            li
+              | Category: 
+              p() #{video.category}
+            li
+              | Description: 
+              p() #{video.description}
+            -var link1 = "/admin/approvevideo?ok=true&link=" + video.link
+            -var link2 = "/admin/approvevideo?ok=false&link=" + video.link
+            a(href=link1) Approve
+            span 
+            a(href=link2) Decline
+    br
+    br
+    br
+    a(href='/admin') Back
   
 
 
