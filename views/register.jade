@@ -43,9 +43,10 @@ html
             br
             span School 
             select#id_school(name='school')
-              -for(var i=0; i<schools.length; i++)
+              -for(var i=1; i<schools.length; i++)
                 -var school = schools[i]
                   option(value=school.name) #{school.name}
+              option(value="其他") 其他
             br
             span Description 
             textarea#id_des(cols='20', rows='5', name='description', placeholder='Describe yourself')

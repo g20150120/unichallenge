@@ -4,12 +4,32 @@ block content
     h3.
       Schools
     ul
-      -for(var i=0; i<schools.length; i++)
+      -for(var i=1; i<schools.length; i++)
         -var school = schools[i]
         li
           p() #{school.name}
+      li
+        p() 其他
     br
     br
+    h3 Add a school
+    form(action='/admin/addschool_post', method='post', onsubmit='return Submit()')
+      span School name 
+      input#id_school(type='text', placeholder='苏州德威国际高中', name='name')
+      br
+      button#id_submit Submit
     br
     br
     a(href='/admin') Back
+
+    script(type='text/javascript').
+      var Submit = function() {
+        var ids = ['school']
+        for(var i=0; i<ids.length; i++) {
+          if(document.getElementById('id_' + ids[i]).value == "") {
+            alert('Please fill in all information needed!')
+            return false
+          }
+        }
+        return true
+      }
