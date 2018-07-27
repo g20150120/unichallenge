@@ -4,21 +4,6 @@ block content
   link(rel='stylesheet', type='text/css', href='/stylesheets/style.css')
   link(rel='stylesheet', type='text/css', href='/stylesheets/homepage.css')
   link(rel='stylesheet', type='text/css', href='/stylesheets/bootstrap.css')
-  style(type='text/css').
-    body {
-      margin-top: 61px;
-      margin-bottom: 61px;
-      padding-top: 30px;
-      padding-left: 250px;
-      padding-right: 250px;
-      background-color: rgb(235, 238, 238);
-    }
-    form {
-      font-size: 22px;
-    }
-    button {
-      color: white;
-    }
 
   -var weight = function(v) {
     -return v.like * 4 + v.viewcount
@@ -30,33 +15,79 @@ block content
     -return v1.time < v2.time
   -}
 
-  body
+  style(type='text/css').
+    .row.cntnt {
+      margin-bottom: 30px;
+      margin-top: 30px;
+      //- border: 1px solid black;
+      width: 518px;
+      padding: 9px;
+      border: 1px solid #e3e3e3;
+      border-bottom-color: #e0e0e0;
+      border-right-color: #ececec;
+      box-shadow: 1px 2px 1px rgba(0,0,0,.072);
+    }
+
+    a.ttl {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    p.des {
+      margin-top: 10px;
+      margin-left: 25px;
+    }
+
+    p.athr {
+      color: grey;
+    }
+
+    a.lk {
+      float: right;
+    }
+
+  body.needStyle
 
     h1 #{category}
-    .row
-      .col-xs-6
-        h3 Top
-        -videos.sort(cmp_top)
-        -for(var i=0; i<videos.length; i++)
-          .row
-          -var video = videos[i]
-          .col-xs-6
-            -var link = '/like?category=' + category + '&link=' + video.link
-            -var jumpTo = '/jumpTo?link=' + video.link
-            a(href=jumpTo) #{video.title}
-          .col-xs-6
-            a(href=link) Like(#{video.like})
-      .col-xs-6
-        h3 Latest
-        -videos.sort(cmp_time)
-        -for(var i=0; i<videos.length; i++)
-          .row
-          -var video = videos[i]
-          .col-xs-6
-            -var link = '/like?category=' + category + '&link=' + video.link
-            a(href=video.link) #{video.title}
-          .col-xs-6
-            a(href=link) Like(#{video.like})
+    
+    .container
+    
+      .row
+        
+        .col-xs-5
+          
+          h2 Top
+          
+          -videos.sort(cmp_top);
+          -for(var i=0; i<videos.length; i++)
+            -var video = videos[i];
+            -var link = '/like?category=' + category + '&link=' + video.link;
+            -var jumpTo = '/jumpTo?link=' + video.link;
+          
+            .row.cntnt       
+              a.ttl(href=jumpTo) #{video.title}
+              p.athr Author: #{video.email}
+              p.des= video.description
+              a.lk(href=link) Like(#{video.like})
+        
+        
+        .col-xs-2
+
+        .col-xs-5
+          
+          h2 Latest
+          
+          -videos.sort(cmp_time);
+          -for(var i=0; i<videos.length; i++)
+            -var video = videos[i];
+            -var link = '/like?category=' + category + '&link=' + video.link;
+            -var jumpTo = '/jumpTo?link=' + video.link;
+          
+            .row.cntnt       
+              a.ttl(href=jumpTo) #{video.title}
+              p.athr Author: #{video.email}
+              p.des= video.description
+              a.lk(href=link) Like(#{video.like})
     
     br
     br

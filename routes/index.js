@@ -341,6 +341,9 @@ router.get('/ranking', function(req, res) {
     } 
   });
 });
+// router.get('/ranking', function(req, res) {
+//   res.sendFile(__dirname + '/htmls/ranking.html');
+// });
 
 // GET the request to like a video
 router.get('/like', function(req, res) {
