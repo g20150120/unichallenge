@@ -21,7 +21,7 @@ var getIp = function(req) {
 router.get('/', function(req, res, next) {
   res.clearCookie('email');
   // res.render('index', { title: 'Express' });
-  console.log(getIp(req));
+  // console.log(getIp(req));
   res.sendFile(__dirname + '/htmls/homepage.html');
 });
 

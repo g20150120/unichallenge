@@ -1,6 +1,0 @@
-GET /users         userlist.jade
-GET /videos        videolist.jade
-...
-
-
-GET /register	title: Register		POST /register_post
