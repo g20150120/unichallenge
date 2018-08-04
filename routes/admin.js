@@ -64,9 +64,9 @@ router.get('/videos', function(req, res) {
 // POST the request to approve a video
 // /admin/approvevideo
 router.get('/approvevideo', function(req, res) {
-  // /admin/approvevideo?ok=true&link=http://www.runoob.com/git/git-basic-operations.html
-  // /admin/approvevideo?ok=false&link=http://www.runoob.com/git/git-basic-operations.html
-  var link = req.query.link;
+  // /admin/approvevideo?ok=true&time=1532670092194
+  // /admin/approvevideo?ok=false&time=1532670092194
+  var t = parseInt(req.query.time);
   // ok is a boolean
   var ok = req.query.ok == 'true';
   // check cookie to validate identity
@@ -81,7 +81,7 @@ router.get('/approvevideo', function(req, res) {
       // if ok == true: accepted
       if(ok) {
         // update by link
-      	videos.update({"link": link}, {$set: {"viewcount": 1, "approved": true}}, function (err, video) { 
+      	videos.update({"time": t}, {$set: {"viewcount": 1, "approved": true}}, function (err, video) { 
 	        if(!err) {
             // refresh page
 	        	res.redirect('/admin/videos');
@@ -90,7 +90,7 @@ router.get('/approvevideo', function(req, res) {
 	      });
       // if ok == false: declined
       } else {
-      	videos.update({"link": link}, {$set: {"viewcount": 1}}, function (err, video) { 
+      	videos.update({"time": t}, {$set: {"viewcount": 1}}, function (err, video) { 
 	        if(!err) {
 	        	res.redirect('/admin/videos');
             db.close();

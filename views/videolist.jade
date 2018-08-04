@@ -22,8 +22,8 @@ block content
             li
               | Description: 
               p() #{video.description}
-            -var link1 = "/admin/approvevideo?ok=true&link=" + video.link
-            -var link2 = "/admin/approvevideo?ok=false&link=" + video.link
+            -var link1 = "/admin/approvevideo?ok=true&time=" + video.time.toString()
+            -var link2 = "/admin/approvevideo?ok=false&time=" + video.time.toString()
             a(href=link1) Approve
             span 
             a(href=link2) Decline

@@ -341,23 +341,19 @@ router.get('/ranking', function(req, res) {
     } 
   });
 });
-// router.get('/ranking', function(req, res) {
-//   res.sendFile(__dirname + '/htmls/ranking.html');
-// });
 
 // GET the request to like a video
 router.get('/like', function(req, res) {
-  // /like?category=All&link=https://v.qq.com/
-  // /like?category=双面人&link=https://v.qq.com/
+  // /like?category=All&time=1532670092194
+  // /like?category=双面人&time=1532670092194
   var ctgry = decodeURI(req.url).split('?')[1].split('&')[0].split('=')[1];
-  var link = decodeURI(req.url).split('?')[1].split('&')[1].split('=')[1];
+  var t = parseInt(decodeURI(req.url).split('?')[1].split('&')[1].split('=')[1]);
 
   // max like sent in 24h 
   var MAX_LIKE = 10;
   
   // get ip
   var ipAdd = getIp(req);
-  console.log(ipAdd);
   
   // get time: int
   var now = new Date();
@@ -379,7 +375,7 @@ router.get('/like', function(req, res) {
       var videos = db.collection('videos');
       // find video by link: assumes no repeating video links
       // add like by one at a time
-      videos.update({"link": link}, {$inc: {"like": 1}}, function(err, video) {
+      videos.update({"time": t}, {$inc: {"like": 1}}, function(err, video) {
         if(!err) {
           // refresh ranking page
           res.redirect('/ranking?category=' + ctgry);
@@ -389,6 +385,7 @@ router.get('/like', function(req, res) {
     });    
   }  
 
+  // !important: left records how many likes has been sent in 24h
   var MongoClient = mongodb.MongoClient;
   // db: vc
   var mongoServer = 'mongodb://localhost:27017/vc';
@@ -401,17 +398,17 @@ router.get('/like', function(req, res) {
         // if this ip exists in DB
         if(ip) {
           // console.log(ip);        
-          // if 24h has passed since last like: left=max-1, time=now, like++
+          // if 24h has passed since last like: left=1, time=now, like++
           if(checkeTime(now, ip.time)) {
-            ips.update({"ip": ipAdd}, {$set: {"left": MAX_LIKE-1, "time": now}}, function(err, nip) {
+            ips.update({"ip": ipAdd}, {$set: {"left": 1, "time": now}}, function(err, nip) {
               incLikeInDB();
               db.close();
             });
           // if last like is less than 24h ago: 
           } else {
-            // if likes sent < MAX_LIKE: max--, like++
-            if(ip.left) {
-              ips.update({"ip": ipAdd}, {$inc: {"left": -1}}, function(err, nip) {
+            // if likes sent < MAX_LIKE: left++, like++
+            if(ip.left < MAX_LIKE) {
+              ips.update({"ip": ipAdd}, {$inc: {"left": 1}}, function(err, nip) {
                 incLikeInDB();
                 db.close();
               });             
@@ -426,11 +423,11 @@ router.get('/like', function(req, res) {
               res.render('error', {title: 'Error'});
             }
           }
-        // if this ip does not exist in DB: insert this ip, left=max-1, time=now, like++
+        // if this ip does not exist in DB: insert this ip, left=1, time=now, like++
         } else {
           var ip = {
             "ip": ipAdd,
-            "left": MAX_LIKE-1,
+            "left": 1,
             "time": now
           };
           ips.insert([ip], function(err, result) {
@@ -445,8 +442,8 @@ router.get('/like', function(req, res) {
 
 // GET the request to jump to some link and update viewcount
 router.get('/jumpTo',function(req, res) {
-  // /jumpTo?link=https://www.booking.com
-  var link = decodeURI(req.url).split('?')[1].split('=')[1];
+  // /jumpTo?time=1532670092194
+  var t = parseInt(decodeURI(req.url).split('?')[1].split('=')[1]);
   var MongoClient = mongodb.MongoClient;
   // db: vc
   var mongoServer = 'mongodb://localhost:27017/vc';
@@ -457,11 +454,13 @@ router.get('/jumpTo',function(req, res) {
       var videos = db.collection('videos');
       // find video by link: assumes no repeating video links
       // add viewcount by one at a time
-      videos.update({"link": link}, {$inc: {"viewcount": 1}}, function(err, video) {
+      videos.update({"time": t}, {$inc: {"viewcount": 1}}, function(err, video) {
         if(!err) {
-          // redirect to that link
-          res.redirect(link);
-          db.close();
+          videos.findOne({"time": t}, function(err, v) {
+            // redirect to that link
+            res.redirect(v.link);
+            db.close();
+          });
         }
       });
     }
