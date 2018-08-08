@@ -7,6 +7,11 @@ var nodemailer = require('nodemailer');
 var bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+// max like sent in 24h 
+var MAX_LIKE = 10;
+// max video in one /ranking page
+var MAX_VIDEO = 15;
+
 var router = express.Router();
 
 var getIp = function(req) {
@@ -308,9 +313,10 @@ router.post('/submitvideo_post', function(req, res) {
 
 // GET the ranking for some category
 router.get('/ranking', function(req, res) {
-  // /ranking?ctgry=All
-  // /ranking?ctgry=双面人
-  var ctgry = decodeURI(req.url).split('?')[1].split('=')[1];
+  // /ranking?category=All&limit=1
+  // /ranking?category=双面人&limit=-1
+  var lmt = req.query.limit;
+  var ctgry = decodeURI(req.url).split('?')[1].split('&')[0].split('=')[1];
   // show only approved videos
   var obj = {
     'approved': true,
@@ -323,8 +329,7 @@ router.get('/ranking', function(req, res) {
   // db: vc
   var mongoServer = 'mongodb://localhost:27017/vc';
   // connect to find all videos in that category
-  MongoClient.connect(mongoServer, function(err, db)
-  {
+  MongoClient.connect(mongoServer, function(err, db) {
     if(!err) {
       // collection: videos
       var videos = db.collection('videos');
@@ -334,7 +339,10 @@ router.get('/ranking', function(req, res) {
           // "Like" function need category information to redirect to
           category: ctgry,
           // sorting of videos (to like and to time) will be done in frontend
-          "videos": video
+          "videos": video,
+          // lmt == 1: limit == 15; lmt == -1: limit == videos.length
+          limit: lmt,
+          MAX_V: MAX_VIDEO
         });
         db.close();
       });
@@ -348,9 +356,6 @@ router.get('/like', function(req, res) {
   // /like?category=双面人&time=1532670092194
   var ctgry = decodeURI(req.url).split('?')[1].split('&')[0].split('=')[1];
   var t = parseInt(decodeURI(req.url).split('?')[1].split('&')[1].split('=')[1]);
-
-  // max like sent in 24h 
-  var MAX_LIKE = 10;
   
   // get ip
   var ipAdd = getIp(req);
@@ -378,7 +383,7 @@ router.get('/like', function(req, res) {
       videos.update({"time": t}, {$inc: {"like": 1}}, function(err, video) {
         if(!err) {
           // refresh ranking page
-          res.redirect('/ranking?category=' + ctgry);
+          res.redirect('/ranking?category=' + ctgry + '&limit=1');
           db.close();
         }
       });
@@ -441,7 +446,7 @@ router.get('/like', function(req, res) {
 });
 
 // GET the request to jump to some link and update viewcount
-router.get('/jumpTo',function(req, res) {
+router.get('/jumpTo', function(req, res) {
   // /jumpTo?time=1532670092194
   var t = parseInt(decodeURI(req.url).split('?')[1].split('=')[1]);
   var MongoClient = mongodb.MongoClient;
@@ -457,15 +462,45 @@ router.get('/jumpTo',function(req, res) {
       videos.update({"time": t}, {$inc: {"viewcount": 1}}, function(err, video) {
         if(!err) {
           videos.findOne({"time": t}, function(err, v) {
-            // redirect to that link
-            res.redirect(v.link);
-            db.close();
+            if(v) {
+              // redirect to that link
+              res.redirect(v.link);
+              db.close();
+            } else {
+              res.redirect('/ranking?category=All');
+              db.close();
+            }
           });
         }
       });
     }
   });
 });
+
+// POST the request to change MAX_LIKE and MAX_VIDEO
+router.post('/changelimit_post', function(req, res) {
+  MAX_LIKE = req.body.like;
+  MAX_VIDEO = req.body.video;
+  res.redirect('/changelimit');
+});
+
+// GET the request to change MAX_LIKE and MAX_VIDEO
+router.get('/changelimit', function(req, res) {
+  if(req.cookies.email != 'admin') {
+    res.locals.error = {
+      message: 'Whoops! Something went wrong!',
+      status: '',
+      stack: ''
+    };
+    res.render('error', {title: 'Error'});
+  } else {
+    res.render('limitlist', {
+      like: MAX_LIKE,
+      video: MAX_VIDEO
+    });
+  }
+});
+
 
 
 

@@ -1,7 +1,7 @@
 extends layout
 block content
   body.needStyle
-    h3.
+    h1.
       Schools
     ul
       -for(var i=1; i<schools.length; i++)
@@ -20,7 +20,7 @@ block content
       button#id_submit Submit
     br
     br
-    a(href='/admin') Back
+    a(href='/admin/manage') Back
 
     script(type='text/javascript').
       var Submit = function() {

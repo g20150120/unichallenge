@@ -2,6 +2,7 @@ var express = require('express');
 var mongodb = require('mongodb');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var nodemailer = require('nodemailer');
 
 var router = express.Router();
 
@@ -38,8 +39,8 @@ router.get('/users', function(req, res) {
 });
 
 // GET the page to show all the videos: dynamic
-// /admin/videos
-router.get('/videos', function(req, res) {
+// /admin/requests
+router.get('/requests', function(req, res) {
   var MongoClient = mongodb.MongoClient;
   // db: vc
   var mongoServer = 'mongodb://localhost:27017/vc';
@@ -50,7 +51,7 @@ router.get('/videos', function(req, res) {
       var videos = db.collection('videos');
       // viewcount == 0 : not accepted nor declined by admin
       videos.find({"viewcount": 0}).toArray(function (err, video) {
-        res.render('videolist',{
+        res.render('videorequests',{
           title: 'Requests',
           // refresh new /admin/videos page
           "videolist" : video
@@ -64,15 +65,50 @@ router.get('/videos', function(req, res) {
 // POST the request to approve a video
 // /admin/approvevideo
 router.get('/approvevideo', function(req, res) {
-  // /admin/approvevideo?ok=true&time=1532670092194
-  // /admin/approvevideo?ok=false&time=1532670092194
+  // /admin/approvevideo?ok=true&time=1532670092194&email=alexzhaojc@126.com
+  // /admin/approvevideo?ok=false&time=1532670092194&email=alexzhaojc@126.com
   var t = parseInt(req.query.time);
   // ok is a boolean
   var ok = req.query.ok == 'true';
-  // check cookie to validate identity
+  var addr = req.query.email;
+  var sub = "";
+  var txt = "";
+  if(ok) {
+    sub = "Congratulations! - Uni-Challenge";
+    txt = "Your video has been approved! Please log in for more details.";
+  } else {
+    sub = "Sorry! - Uni-Challenge";
+    txt = "Your video has been decline. Please log in for more details or to contact administrators.";
+  }
+
   var MongoClient = mongodb.MongoClient;
   // db: vc
   var mongoServer = 'mongodb://localhost:27017/vc';
+
+  // send email to notify user
+  let transporter = nodemailer.createTransport({
+    host: "smtp.qq.com",
+    port: 465,
+    secureConnection: true,
+    auth: {
+      user: "1467222535@qq.com",
+      pass: "pziglqgwycctifhd"
+    }
+  });
+  let mailOptions = {
+    from: "Uni-Challenge  <1467222535@qq.com>",
+    to: addr,
+    subject: sub,
+    text: txt
+  };
+  transporter.sendMail(mailOptions, (err, info) => {
+    if(!err) {
+      console.log('Message sent: %s', info.messageId + ' ' + txt);
+    }
+  });  
+
+
+  
   // connect to change "approved" and "viewcount"
   MongoClient.connect(mongoServer, function (err, db) {
     if(!err) {
@@ -84,7 +120,7 @@ router.get('/approvevideo', function(req, res) {
       	videos.update({"time": t}, {$set: {"viewcount": 1, "approved": true}}, function (err, video) { 
 	        if(!err) {
             // refresh page
-	        	res.redirect('/admin/videos');
+	        	res.redirect('/admin/requests');
             db.close();
 	        }
 	      });
@@ -92,7 +128,7 @@ router.get('/approvevideo', function(req, res) {
       } else {
       	videos.update({"time": t}, {$set: {"viewcount": 1}}, function (err, video) { 
 	        if(!err) {
-	        	res.redirect('/admin/videos');
+	        	res.redirect('/admin/requests');
             db.close();
 	        }
 	      });  
@@ -163,7 +199,6 @@ router.post('/addschool_post', function(req, res) {
     }
   });
 });
-
 
 
 

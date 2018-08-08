@@ -1,0 +1,18 @@
+extends layout
+block content
+  body.needStyle
+    h1.
+      Limits
+    form(action='/changelimit_post', method='post')
+      span Like Limit 
+      input(type='text', value=like, name='like')
+      br
+      span Video Limit
+      input(type='text', value=video, name='video')
+      br
+      button Submit
+    br
+    br
+    a(href='/admin') Back
+
+    

@@ -5,6 +5,9 @@ block content
   link(rel='stylesheet', type='text/css', href='/stylesheets/homepage.css')
   link(rel='stylesheet', type='text/css', href='/stylesheets/bootstrap.css')
 
+  -var len = videos.length
+  -if(limit == 1 && len > MAX_V) len = MAX_V
+  
   -var weight = function(v) {
     -return (v.like*4 + v.viewcount);
   -}

@@ -1,10 +1,15 @@
 extends layout
 block content
+  -var cmp = function(u1, u2) {
+    -if(u1.school !== u2.school) return 1;
+    -return 0; 
+  -}
+  -userlist = userlist.slice(1).sort(cmp);
   body.needStyle
     h1.
       Users
     ul
-      -for(var i=1; i<userlist.length; i++)
+      -for(var i=0; i<userlist.length; i++)
         -var user = userlist[i]
         li
           p() #{user.email} is from #{user.school}.
@@ -12,4 +17,4 @@ block content
     br
     br
     br
-    a(href='/admin') Back
+    a(href='/admin/manage') Back
