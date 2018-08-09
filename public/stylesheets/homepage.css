@@ -95,7 +95,7 @@ body {
    background: #fff;
    font-family: 'opensans-regular', sans-serif;
    font-weight: normal;
-   font-size: 15px;
+   font-size: 20px;
    line-height: 30px;
 /*	color: #838C95;
 */
@@ -182,7 +182,7 @@ ul ul li, ul ol li,
 ol ol li, ol ul li { margin-bottom: 6px; }
 li { line-height: 18px; margin-bottom: 12px; }
 ul.large li { }
-li p { }
+li p { font-size: 20px; }
 
 
 /*  5. Images  --------------------------------------------------------- */

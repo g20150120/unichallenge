@@ -78,7 +78,7 @@ router.get('/approvevideo', function(req, res) {
     txt = "Your video has been approved! Please log in for more details.";
   } else {
     sub = "Sorry! - Uni-Challenge";
-    txt = "Your video has been decline. Please log in for more details or to contact administrators.";
+    txt = "Your video has been declined. Please log in for more details or to contact administrators.";
   }
 
   var MongoClient = mongodb.MongoClient;
@@ -146,7 +146,7 @@ router.get('/manage', function(req, res) {
   // if request has a parameter indicating a collection of DB
   if(haveParam) {
     var col = decodeURI(req.url).split('?')[1].split('=')[1];
-    if(col == 'schools' || col == 'users') {
+    if(col == 'schools' || col == 'users' || col == 'videos' || col == 'ips') {
       var MongoClient = mongodb.MongoClient;
       // db: vc
       var mongoServer = 'mongodb://localhost:27017/vc';
@@ -159,10 +159,18 @@ router.get('/manage', function(req, res) {
               obj.title = 'Schools';
               obj.schools = items;
               res.render('schoollist', obj);
-            } else {
+            } else if(col == 'users') {
               obj.title = 'Users';
               obj.userlist = items;
               res.render('userlist', obj);
+            } else if(col == 'videos') {
+              obj.title = 'Videos';
+              obj.videolist = items;
+              res.render('videolist', obj);
+            } else if(col == 'ips') {
+              obj.title = 'IP Addresses';
+              obj.iplist = items;
+              res.render('iplist', obj);
             }
             db.close();
           });
@@ -200,10 +208,45 @@ router.post('/addschool_post', function(req, res) {
   });
 });
 
+// GET the request to remove a video in DB
+// /admin/deletevideo?time=153271837918
+router.get('/deletevideo', function(req, res) {
+  var t = parseInt(req.query.time);
+  var MongoClient = mongodb.MongoClient;
+  // db: vc
+  var mongoServer = 'mongodb://localhost:27017/vc';
+  MongoClient.connect(mongoServer, function(err, db) {
+    if(!err) {
+      var videos = db.collection('videos');
+      videos.remove({"time": t}, function(err, v) {
+        if(!err) {
+          res.redirect('/admin/manage?collection=videos');
+          db.close();
+        }
+      });
+    }  
+  });
+});
 
-
-
-
+// GET the request to clear the record of an IP addr
+// /admin/deleteip?ip=::1
+router.get('/deleteip', function(req, res) {
+  var ip = req.query.ip;
+  var MongoClient = mongodb.MongoClient;
+  // db: vc
+  var mongoServer = 'mongodb://localhost:27017/vc';
+  MongoClient.connect(mongoServer, function(err, db) {
+    if(!err) {
+      var ips = db.collection('ips');
+      ips.update({"ip": ip}, {$set: {"left": 0}}, function(err, i) {
+        if(!err) {
+          res.redirect('/admin/manage?collection=ips');
+          db.close();
+        }
+      });
+    }
+  });
+});
 
 
 

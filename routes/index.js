@@ -322,9 +322,14 @@ router.get('/ranking', function(req, res) {
     'approved': true,
   };
   // specify a category
-  if(ctgry != "All") {
-    obj.category = ctgry;
+  var arr = ['表面笑嘻嘻', '双面人', '打结的舌头', '我想要水', '麒麟臂', '贼眉鼠眼', '亲密接触', '气 死了'];
+  for(var i=0; i<arr.length; i++) {
+    if(ctgry == arr[i]) {
+      obj.category = ctgry;
+      break;
+    }
   }
+
   var MongoClient = mongodb.MongoClient;
   // db: vc
   var mongoServer = 'mongodb://localhost:27017/vc';
@@ -495,6 +500,7 @@ router.get('/changelimit', function(req, res) {
     res.render('error', {title: 'Error'});
   } else {
     res.render('limitlist', {
+      title: 'Limits',
       like: MAX_LIKE,
       video: MAX_VIDEO
     });

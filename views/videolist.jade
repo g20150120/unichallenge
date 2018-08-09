@@ -1,0 +1,73 @@
+extends layout
+block content
+
+  style(type='text/css').
+    
+    body.rnking {
+      margin-top: 61px;
+      margin-bottom: 61px;
+      padding-top: 30px;
+      padding-left: 10%;
+      padding-right: 10%;
+      background-color: rgb(235, 238, 238);
+    }
+
+    .row.cntnt {
+      margin-bottom: 30px;
+      margin-top: 30px;
+      //- border: 1px solid black;
+      width: 518px;
+      padding: 9px;
+      border: 1px solid #e3e3e3;
+      border-bottom-color: #e0e0e0;
+      border-right-color: #ececec;
+      box-shadow: 1px 2px 1px rgba(0,0,0,.072);
+    }
+
+    a.ttl {
+      font-size: 24px;
+      margin-top: 10px;
+    }
+
+    p.des {
+      margin-top: 10px;
+      margin-left: 25px;
+    }
+
+    p.athr {
+      color: grey;
+    }
+
+    a.rt {
+      float: right;
+    }
+
+    a.lt {
+      float: left;
+    }
+  
+  body.rnking
+    h1.
+      Videos
+    .container
+      .row
+        -for(var i=0; i<videolist.length; i++)
+          -var video = videolist[i]
+          -var link1 = "/admin/deletevideo?time=" + video.time.toString()
+
+          .row.cntnt       
+              a.ttl(href="#{video.link}") #{video.title}
+              p.athr Author: #{video.email}
+              p.des= video.description
+              -if(video.approved == false && video.viewcount > 0)
+                a.lt(href="") Declined
+              -else if(video.approved == false && video.viewcount == 0)
+                a.lt(href="") Not viewed
+              -else
+                a.lt(href="") Approved
+              a.rt(href=link1) Delete
+
+    br
+    br
+    br
+    a(href='/admin/manage') Back
